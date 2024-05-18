@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Thời Hạn Tạm Giam và Tính Tuổi</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        .highlight {
+            background-color: yellow;
+        }
+        .input {
+            background-color: #ffcccc;
+        }
+        td input[type="number"] {
+            width: 90%;
+            box-sizing: border-box;
+        }
+    </style>
+    <script>
+        function calculateDates() {
+            const startDate = new Date(document.getElementById('startDate').value);
+            const duration = parseInt(document.getElementById('duration').value);
+            const extension = parseInt(document.getElementById('extension').value);
+
+            const endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + duration + extension - 1);
+
+            const today = new Date();
+            const daysRemaining = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
+
+            document.getElementById('endDate').innerText = endDate.toLocaleDateString('vi-VN');
+            document.getElementById('daysRemaining').innerText = daysRemaining;
+        }
+
+        function calculateAge() {
+            const birthDate = new Date(document.getElementById('birthDate').value);
+            const calcDate = new Date(document.getElementById('calcDate').value);
+
+            const years = calcDate.getFullYear() - birthDate.getFullYear();
+            const months = calcDate.getMonth() - birthDate.getMonth();
+            const days = calcDate.getDate() - birthDate.getDate();
+
+            let adjustedYears = years;
+            let adjustedMonths = months;
+            let adjustedDays = days;
+
+            if (days < 0) {
+                adjustedMonths--;
+                adjustedDays += new Date(calcDate.getFullYear(), calcDate.getMonth(), 0).getDate();
+            }
+            if (months < 0) {
+                adjustedYears--;
+                adjustedMonths += 12;
+            }
+
+            document.getElementById('calculatedAge').innerText = `${adjustedYears} năm ${adjustedMonths} tháng ${adjustedDays} ngày`;
+
+            const today = new Date();
+            const ageNow = ((today - birthDate) / (1000 * 60 * 60 * 24 * 365.25)).toFixed(15);
+
+            document.getElementById('currentAge').innerText = `${ageNow} tuổi`;
+        }
+    </script>
+</head>
+<body onload="calculateDates(); calculateAge();">
+    <h2>* TÍNH THỜI HẠN TẠM GIAM</h2>
+    <table>
+        <tr>
+            <th class="wide">Ngày giam</th>
+            <th class="narrow">Thời hạn Tạm giam (Ngày)</th>
+            <th class="narrow">Gia hạn Tạm giam (Ngày)</th>
+        </tr>
+        <tr>
+            <td class="input"><input type="date" id="startDate" value="2024-03-22" oninput="calculateDates()"></td>
+            <td class="input"><input type="number" id="duration" value="30" oninput="calculateDates()"></td>
+            <td class="input"><input type="number" id="extension" value="90" oninput="calculateDates()"></td>
+        </tr>
+        <tr>
+            <td colspan="3" class="highlight">KẾT QUẢ</td>
+        </tr>
+        <tr>
+            <td>Ngày hết hạn</td>
+            <td colspan="2" id="endDate">19/07/2024</td>
+        </tr>
+        <tr>
+            <td>Ngày còn lại</td>
+            <td colspan="2" id="daysRemaining">63</td>
+        </tr>
+    </table>
+
+    <h2>* TÍNH TUỔI</h2>
+    <table>
+        <tr>
+            <th>Họ và tên</th>
+            <th>Ngày sinh</th>
+            <th>Ngày tính tuổi</th>
+        </tr>
+        <tr>
+            <td>Nguyễn Thị B</td>
+            <td class="input"><input type="date" id="birthDate" value="2008-01-23" oninput="calculateAge()"></td>
+            <td class="input"><input type="date" id="calcDate" value="2020-05-13" oninput="calculateAge()"></td>
+        </tr>
+        <tr class="highlight">
+            <td>Tuổi đến thời điểm cần tính</td>
+            <td colspan="2" id="calculatedAge">12 năm 3 tháng 20 ngày</td>
+        </tr>
+        <tr class="highlight">
+            <td>Tuổi hiện nay là</td>
+            <td colspan="2" id="currentAge">16,3128824476651 tuổi</td>
+        </tr>
+    </table>
+
+    <p>* Nhập vào ô màu đỏ và đợi kết quả tính ngày hết hạn tạm giam và tính tuổi. Xin cảm ơn!</p>
+</body>
+</html>
